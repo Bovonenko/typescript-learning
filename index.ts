@@ -1,32 +1,17 @@
-const userData = {
-	isBirthdayData: true,
-	age: 40,
-	userName: 'John',
-	messeges: {
-		error: 'Error',
-	},
-};
+const departments: string[] = ['dev', 'design', 'marketing'];
+const department = departments[0];
 
-const createError = (msg: string) => {
-	throw new Error(msg);
-};
+// departments.push(4);
+const report = departments
+	.filter((d: string) => d !== 'dev')
+	.map((d: string) => `${d} - done`);
 
-function logBrtMsg({
-	isBirthdayData,
-	age,
-	userName,
-	messeges: { error },
-}: {
-	isBirthdayData: boolean;
-	age: number;
-	userName: string;
-	messeges: { error: string };
-}): string {
-	if (isBirthdayData) {
-		return `Congrats ${userName.toUpperCase()}, age: ${age + 1}`;
-	} else {
-		return createError('error');
-	}
-}
+const nums: number[][] = [
+	[3, 5, 6],
+	[3, 5, 6],
+];
 
-console.log(logBrtMsg(userData));
+const [first] = report;
+console.log(first);
+
+// const any: any[] = [3, 5, 6, 'dfs']; // bad practice
