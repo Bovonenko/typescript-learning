@@ -1,22 +1,32 @@
-const currRate: string = '1.05';
-
-const fetchCurr = (response: string): number => {
-	const data: number = JSON.parse(response);
-	return data;
+const userData = {
+	isBirthdayData: true,
+	age: 40,
+	userName: 'John',
+	messeges: {
+		error: 'Error',
+	},
 };
 
-const transferEurToUsd = (
-	available: boolean,
-	amount: number,
-	commission: number
-): void => {
-	if (available) {
-		let res = fetchCurr(currRate) * amount * commission;
-		console.log(res);
-		// Или запись в элемент на странице вместо консоли
+const createError = (msg: string) => {
+	throw new Error(msg);
+};
+
+function logBrtMsg({
+	isBirthdayData,
+	age,
+	userName,
+	messeges: { error },
+}: {
+	isBirthdayData: boolean;
+	age: number;
+	userName: string;
+	messeges: { error: string };
+}): string {
+	if (isBirthdayData) {
+		return `Congrats ${userName.toUpperCase()}, age: ${age + 1}`;
 	} else {
-		console.log('Сейчас обмен недоступен');
+		return createError('error');
 	}
-};
+}
 
-transferEurToUsd(true, 500, 1.05);
+console.log(logBrtMsg(userData));
