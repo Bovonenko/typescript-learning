@@ -2,23 +2,33 @@ let msg: 'Hello';
 
 msg = 'Hello';
 
-const serverConfig: { protocol: 'http' | 'https'; port: 3000 | 3001 } = {
-	protocol: 'https',
-	port: 3001,
+type Config = { protocol: 'http' | 'https'; port: 3000 | 3001 };
+type Role = {
+	role: string;
 };
 
-const port3000: number = 3000;
-const port3001: number = 3001;
+type ConfigWithRole = Config & Role;
 
-const startServer: (protocol: 'http' | 'https', port: 3000 | 3001) => string = (
+const serverConfig: ConfigWithRole = {
+	protocol: 'https',
+	port: 3001,
+	role: 'admin',
+};
+
+const backupConfig: ConfigWithRole = {
+	protocol: 'http',
+	port: 3000,
+	role: 'sysadmin',
+};
+
+type StartFunction = (protocol: 'http' | 'https', port: 3000 | 3001) => string;
+
+const startServer: StartFunction = (
 	protocol: 'http' | 'https',
 	port: 3000 | 3001
 ): 'Server started' => {
-	if (port === port3000 || port === port3001) {
-		console.log(`Server started on ${protocol}://server:${port}`);
-	} else {
-		console.error('Invalid port');
-	}
+	console.log(`Server started on ${protocol}://server:${port}`);
+
 	return 'Server started';
 };
 
