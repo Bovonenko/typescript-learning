@@ -1,50 +1,37 @@
-const message: string | number = 5;
-const messages: string[] | number[] = ['a', 'b'];
+let msg: 'Hello';
 
-// function printMsg(msg: string | number | boolean): void {
-// 	if (typeof msg === 'string' || typeof msg === 'number') {
-// 		console.log(msg.toString());
-// 	} else {
-// 		console.log(msg);
-// 	}
+msg = 'Hello';
 
-// 	console.log(msg);
-// }
+const port3000: number = 3000;
+const port3001: number = 3001;
 
-function printMsg(msg: string[] | number | boolean): void {
-	if (Array.isArray(msg)) {
-		msg.forEach((m) => console.log(m));
-	} else if (typeof msg === 'number') {
-		console.log(msg.toFixed());
+function startServer(
+	protocol: 'http' | 'https',
+	port: 3000 | 3001
+): 'Server started' {
+	if (port === port3000 || port === port3001) {
+		console.log(`Server started on ${protocol}://server:${port}`);
 	} else {
-		console.log(msg);
+		console.error('Invalid port');
 	}
+	return 'Server started';
 }
 
-printMsg(4);
+startServer('http', 3001);
 
-const printReadings = (a: number | string, b: number | boolean) => {
-	if (a === b) {
-		console.log(a, b);
-	}
-};
+function createAnimation(
+	id: string | number,
+	animName: string,
+	timingFunc: 'ease' | 'ease-out' | 'ease-in' = 'ease',
+	duration: number,
+	iterCount: 'infinite' | number
+): void {
+	// const elem = document.querySelector(`#${id}`) as HTMLElement;
 
-const printReadings2 = (a: number[] | string) => {
-	console.log(a.slice(0, 3));
-};
-
-function checkReading(readings: { system: number } | { user: number }): void {
-	if ('system' in readings) {
-		console.log(readings.system);
-	} else {
-		console.log(readings.user);
-	}
+	// if (elem) {
+	console.log(`${animName} ${timingFunc} ${duration} ${iterCount}`);
+	// elem.style.animation = `${animName} ${timingFunc} ${duration} ${iterCount}`;
+	// }
 }
 
-function logValue(x: string | Date) {
-	if (x instanceof Date) {
-		console.log(x.getDate());
-	} else {
-		console.log(x.trim());
-	}
-}
+createAnimation('id', 'fade', 'ease-in', 5, 'infinite');
