@@ -1,13 +1,9 @@
-const userDataTuple: [boolean, number, ...string[]] = [
-	true,
-	40,
-	'John',
-	'Alex',
-	'Ann',
-];
-// userDataTuple[3];
-// userDataTuple.push(40);
-// userDataTuple[3];
+const message: string | number = 5;
+const messages: string[] | number[] = ['a', 'b'];
 
-const res = userDataTuple.map((t) => `${t} - data`);
-const [bthd, age, userName] = userDataTuple;
+function printMsg(msg: string | number): void {
+	console.log(msg.toLowerCase());
+}
+
+printMsg(4);
+printMsg('dsjafksdjk');
