@@ -1,17 +1,50 @@
-const departments: string[] = ['dev', 'design', 'marketing'];
-const department = departments[0];
+const electricityUserData = {
+	readings: 95,
+	units: 'kWt',
+	mode: 'double',
+};
 
-// departments.push(4);
-const report = departments
-	.filter((d: string) => d !== 'dev')
-	.map((d: string) => `${d} - done`);
+const waterUserData = {
+	readings: 3,
+	units: 'm3',
+};
 
-const nums: number[][] = [
-	[3, 5, 6],
-	[3, 5, 6],
-];
+const elRate: number = 0.45;
+const wRate: number = 2;
 
-const [first] = report;
-console.log(first);
+const monthPayments: number[] = [0, 0]; // [electricity, water]
 
-// const any: any[] = [3, 5, 6, 'dfs']; // bad practice
+const calculatePayments = (
+	{ readings, mode }: { readings: number; mode: string },
+	wData: { readings: number },
+	elRate: number,
+	wRate: number
+): void => {
+	if (mode === 'double' && readings < 50) {
+		monthPayments[0] = readings * elRate * 0.7;
+	} else {
+		monthPayments[0] = readings * elRate;
+	}
+
+	monthPayments[1] = wData.readings * wRate;
+};
+
+calculatePayments(electricityUserData, waterUserData, elRate, wRate);
+
+const sendInvoice = (
+	[el, water]: number[],
+	electricityUserData: { readings: number; units: string },
+	waterUserData: { readings: number; units: string }
+): string => {
+	const text = `    Hello!
+    This month you used ${electricityUserData.readings} ${electricityUserData.units} of electricity
+    It will cost: ${el}€
+    
+    This month you used ${waterUserData.readings} ${waterUserData.units} of water
+    It will cost: ${water}€`;
+
+	return text;
+};
+
+const invoice = sendInvoice(monthPayments, electricityUserData, waterUserData);
+console.log(invoice);
