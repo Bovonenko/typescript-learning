@@ -1,29 +1,52 @@
-const TOP = 'Top';
-const RIGHT = 'Right';
+// let smth: unknown;
 
-enum Directions {
-	TOP,
-	RIGHT,
-	LEFT,
-	BOTTOM,
-}
+// smth = 'str';
 
-enum TiminigFunc {
-	EASE = 'ease',
-	EASE_IN = 'ease-in',
-	LINEAR = 'linear',
-}
+// let data: string[] = smth;
+// data.find((e) => e);
 
-enum TiminigFuncN {
-	EASE = 1,
-	EASE_IN = 10,
-	LINEAR = EASE * 2,
-}
+// const someValue: unknown = 10;
+// someValue.method();
 
-function frame(elem: string, dir: Directions, tFunc: TiminigFuncN): void {
-	if (dir === Directions.RIGHT) {
-		console.log(tFunc);
+function fetchData(data: unknown): void {
+	if (typeof data === 'string') {
+		console.log(data.toLocaleLowerCase());
 	}
 }
 
-frame('id', Directions.RIGHT, TiminigFuncN.LINEAR);
+const userData = '{"isBirthday": true, "userName": "John", "age": 40}';
+
+function safeParse(s: string): unknown {
+	return JSON.parse(s);
+}
+
+const data = safeParse(userData);
+
+function transferData(d: unknown): void {
+	if (typeof d === 'string') {
+		console.log(d.toLocaleLowerCase());
+	} else if (typeof d === 'object' && d) {
+		console.log(data);
+	} else {
+		console.error('some error');
+	}
+}
+
+transferData(data);
+
+try {
+	if (1) {
+		throw new Error('error');
+	}
+} catch (e) {
+	if (e instanceof Error) {
+		console.log(e.message);
+	} else if (typeof e === 'string') {
+		console.log(e);
+	}
+}
+
+type T0 = any | unknown;
+type T1 = number | unknown;
+type T2 = any & unknown;
+type T3 = number & unknown;
