@@ -1,67 +1,33 @@
-// Перечисление с названием TypesOfMedia, которое включает строчные типы video, audio
-enum TypesOfMedia {
-	VIDEO = 'video',
-	AUDIO = 'audio',
-}
+const fetchData = (url: string, method: 'GET' | 'POST'): void => {
+	console.log(method);
+};
 
-// Перечисление с названием FormatsOfMedia, которое включает строчные видео-форматы: .mp4, .mov, .mkv, .flv, .webM
+const reqOptions = {
+	url: 'https://someurl.com',
+	method: 'GET',
+};
 
-enum FormatsOfMedia {
-	MP4 = '.mp4',
-	MOV = '.mov',
-	MKV = '.mkv',
-	FLV = '.flv',
-	WEBM = '.webM',
-}
-// Описание интерфейса, в котором:
-// name - строка
-// type - один из перечисления выше
-// format = один из перечисления выше
-// subtitles - необязательное поле типа строка
-// marks - необязательное поле неизвестного типа
+const str = 'str';
+const method = 'GET';
 
-interface Media {
-	name: string;
-	type: TypesOfMedia;
-	format: FormatsOfMedia;
-	subtitles?: string;
-	marks?: unknown;
-}
+fetchData('qqq', 'GET');
+fetchData(reqOptions.url, reqOptions.method as 'GET');
 
-function playMedia(
-	{ name, type, format, subtitles, marks }: Media = {
-		name: 'example',
-		type: TypesOfMedia.AUDIO,
-		format: FormatsOfMedia.MP4,
-	}
-): string {
-	let marksLog: string;
+const box = document.querySelector('.box') as HTMLElement;
+const input = document.querySelector('input') as HTMLInputElement;
 
-	if (Array.isArray(marks)) {
-		marksLog = marks.join(', ');
-	} else if (typeof marks === 'string') {
-		marksLog = marks;
-	} else {
-		marksLog = 'Unsupported type of marks';
-	}
+const someNumber: number = +input.value;
+console.log(someNumber * 2);
 
-	// Создать функционал, что если marks - это массив, то "сложить" все эелементы в одну строку и поместить в marksLog
-	// Если это строка, то просто поместить её в marksLog
-	// Если что-то другое - то marksLog = "Unsupported type of marks"
-	// Не допускайте any!
+let a = 'value' as const;
 
-	console.log(`Media ${name}${format} is ${type}
-    Marks: ${marksLog}
-    Subtitles: ${subtitles ?? 'none'}`);
-	// помните что это за оператор ??
+let b = { f: 100 } as const;
+let c = [] as const;
 
-	return 'Media started';
-}
+let value = 'value';
+let arr = ['sd', 'dff'];
+let obj = { f: 100 };
 
-playMedia({
-	name: 'WoW',
-	format: FormatsOfMedia.FLV,
-	type: TypesOfMedia.VIDEO,
-	subtitles: 'hmhmhm hmhmhm doh',
-	marks: ['4:30', '5:40'],
-});
+// let T0 = obj as const;
+
+let T5 = (Math.round(Math.random() * 1) ? 'yes' : 'no') as const;
