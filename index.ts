@@ -1,51 +1,54 @@
-interface Car {
-	name: 'car';
-	engine: string;
-	wheels: number;
+// Request
+// {
+//     animal: 'cat' | 'dog' | 'bird',
+//     breed: string,
+//     sterilized?: string
+// }
+
+type Animal = 'cat' | 'dog' | 'bird';
+
+enum AnimalStatus {
+	Available = 'available',
+	NotAvailable = 'not available',
 }
 
-interface Ship {
-	name: 'ship';
-	engine: string;
-	sail: string;
+interface AnimalData {
+	animal: Animal;
+	breed: string;
+	sterilized?: string;
 }
 
-interface Airplane {
-	name: 'airplane';
-	engine: string;
-	wings: string;
+interface AnimalAvailableData extends AnimalData {
+	location: string;
+	age?: number;
 }
 
-interface ComplexVehicle {
-	name: 'car' | 'ship' | 'airplane';
-	engine: string;
-	wheels?: number;
-	sail?: string;
-	wings?: string;
+interface AnimalNotAvailableData {
+	message: string;
+	nextUpdateIn: Date;
 }
 
-type Vehicle = Car | Ship | Airplane;
+interface Available {
+	status: AnimalStatus.Available;
+	data: AnimalAvailableData;
+}
 
-const car: ComplexVehicle = {
-	name: 'car',
-	engine: 'V8',
-};
+interface NotAvailable {
+	status: AnimalStatus.NotAvailable;
+	data: AnimalNotAvailableData;
+}
 
-function repairVehicle(vehicle: ComplexVehicle) {
-	switch (vehicle.name) {
-		case 'car':
-			console.log(vehicle.wheels! * 2);
-			break;
-		case 'ship':
-			console.log(vehicle.sail);
-			break;
-		case 'airplane':
-			console.log(vehicle.wings);
-			break;
-		default:
-			// const smth: never = vehicle;
-			console.log('oops!');
+type Res = Available | NotAvailable;
+
+function isAvailable(res: Res): res is Available {
+	return (res as Available).status === AnimalStatus.Available;
+}
+
+function checkAnimalData(animal: Res): AnimalAvailableData | string {
+	if (isAvailable(animal)) {
+		// Заменить условие!
+		return animal.data;
+	} else {
+		return `${animal.data.message}, you can try in ${animal.data.nextUpdateIn}`;
 	}
 }
-
-repairVehicle(car);
