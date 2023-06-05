@@ -1,11 +1,11 @@
 const serverNewConfig = {
-	protocol: 'https',
+	protocol: "https",
 	port: 3001,
-	role: 'admin',
+	role: "admin",
 };
 
 const backupConfig = {
-	protocol: 'http',
+	protocol: "http",
 	port: 3000,
 };
 
@@ -14,10 +14,9 @@ interface BasicConfig {
 	port: number;
 }
 
-const startNewServer = (config: BasicConfig): 'Server started' => {
-	console.log(`Server started on ${config.protocol}://server:${config.port}`);
-
-	return 'Server started';
+const startNewServer = (config: BasicConfig): "Server started" => {
+	console.log(`server started on ${config.protocol}://server:${config.port}`);
+	return "Server started";
 };
 
 startNewServer(serverNewConfig);
