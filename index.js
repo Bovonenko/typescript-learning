@@ -1,59 +1,72 @@
-var formData = {
-    email: "",
-    title: "",
-    text: "",
-    checkbox: false
+var player1 = {
+    game: "CS:GO",
+    hours: 300,
+    server: "basic"
 };
-// Последовательность действий:
-// 1) Происходит submit любой из форм
-// 2) Все данные из 4х полей со страницы переходят в свойства объекта formData
-// 3) Запускается функция validateFormData с этим объектом, возвращает true/false
-// 4) Если на предыдущем этапе true, то запускается функция checkFormData с этим объектом
-var btns = document.querySelectorAll(".btn");
-var emailInput = document.querySelector("#email");
-var titleInput = document.querySelector("#title");
-var checkboxInput = document.querySelector("#checkbox");
-var textInput = document.querySelector("#text");
-btns.forEach(function (btn) {
-    var btnElem = btn;
-    btnElem.addEventListener("click", function (e) {
-        e.preventDefault();
-        formData.title = titleInput.value;
-        formData.text = textInput.value;
-        formData.checkbox = checkboxInput.checked;
-        formData.email = emailInput.value;
-        if (validateFormData(formData)) {
-            checkFormData(formData);
+var player2 = {
+    game: 2048,
+    hours: "300 h.",
+    server: "arcade"
+};
+var player3 = {
+    game: "Chess",
+    hours: {
+        total: 500,
+        inMenu: 50
+    },
+    server: "chess"
+};
+function calculateAmountOfFigures(figure) {
+    var amount = figure.reduce(function (acc, item) {
+        switch (item.name) {
+            case "circle":
+                acc.circles += 1;
+                break;
+            case "line":
+                acc.others += 1;
+                break;
+            case "rect":
+                acc.squares += 1;
+                break;
+            case "triangle":
+                acc.triangles += 1;
+                break;
         }
-    });
-});
-function validateFormData(data) {
-    // Если каждое из свойств объекта data правдиво...
-    var values = Object.values(data);
-    var areValid = true;
-    for (var i = 0; i < values.length; i++) {
-        if (!values[i]) {
-            areValid = false;
-            break;
-        }
-    }
-    if (areValid) {
-        return true;
-    }
-    else {
-        console.log("Please, complete all fields");
-        return false;
-    }
+        return acc;
+    }, { squares: 0, circles: 0, triangles: 0, others: 0 });
+    return amount;
 }
-function checkFormData(data) {
-    var email = data.email;
-    var emails = ["example@gmail.com", "example@ex.com", "admin@gmail.com"];
-    var emailExists = emails.includes(email);
-    // Если email совпадает хотя бы с одним из массива
-    if (emailExists) {
-        console.log("This email is already exist");
-    }
-    else {
-        console.log("Posting data...");
-    }
-}
+var data = [
+    {
+        name: "rect",
+        data: { a: 5, b: 10 }
+    },
+    {
+        name: "rect",
+        data: { a: 6, b: 11 }
+    },
+    {
+        name: "triangle",
+        data: { a: 5, b: 10, c: 14 }
+    },
+    {
+        name: "line",
+        data: { l: 15 }
+    },
+    {
+        name: "circle",
+        data: { r: 10 }
+    },
+    {
+        name: "circle",
+        data: { r: 5 }
+    },
+    {
+        name: "rect",
+        data: { a: 15, b: 7 }
+    },
+    {
+        name: "triangle"
+    },
+];
+console.log(calculateAmountOfFigures(data));
