@@ -1,48 +1,67 @@
-interface ICompany {
-	name: string;
-	debts: number;
-	departments: Department[];
-	management: {
-		owner: string;
-	};
+interface IPhone {
+	company: string;
+	number: number;
 }
 
-interface Department {
-	[key: string]: string;
-}
-const debtss = "debts";
-type CompanyDebtsType = ICompany[typeof debtss];
-type CompanyOwnerType = ICompany["management"]["owner"];
-type CompanyDepartmentsType = ICompany["departments"][number];
-type CompanyDepartmentsTypeS = ICompany["departments"];
-type Test = ICompany[keyof ICompany];
+// IMobilePhone должен наследоваться от IPhone,
+// тип свойства companyPartner зависит от свойства company
 
-type CompanyKeys = keyof ICompany;
-const keys: CompanyKeys = "debts";
-
-function printDebts<T, K extends keyof T, S extends keyof T>(
-	company: T,
-	name: K,
-	debts: S
-) {
-	console.log(`Company ${company[name]}, debts: ${company[debts]}`);
+interface IMobilePhone extends IPhone {
+	size: string;
+	companyPartner: IPhone["company"];
+	manufactured: Date;
 }
 
-const google: ICompany = {
-	name: "Google",
-	debts: 5500,
-	departments: [
-		{
-			sales: "sales",
-			developer: "dev",
-		},
-	],
-	management: {
-		owner: "John",
+// Типизировать объект phones
+
+const phones: IMobilePhone[] = [
+	{
+		company: "Nokia",
+		number: 1285637,
+		size: "5.5",
+		companyPartner: "MobileNokia",
+		manufactured: new Date("2022-09-01"),
 	},
-};
+	{
+		company: "Samsung",
+		number: 4356637,
+		size: "5.0",
+		companyPartner: "SamMobile",
+		manufactured: new Date("2021-11-05"),
+	},
+	{
+		company: "Apple",
+		number: 4552833,
+		size: "5.7",
+		companyPartner: "no data",
+		manufactured: new Date("2022-05-24T12:00:00"),
+	},
+];
 
-printDebts(google, "name", "debts");
+interface IPhonesManufacturedAfterDate extends IMobilePhone {
+	initialDate: string;
+}
 
-type googleKeys = keyof typeof google;
-const keyys: googleKeys = "name";
+// Функция должна отфильтровать массив данных и вернуть новый массив
+// с телефонами, выпущенными после даты в третьем аргументе
+
+function filterPhonesByDate(
+	phones: IMobilePhone[],
+	key: keyof IMobilePhone,
+	initial: string
+): IPhonesManufacturedAfterDate[] {
+	const filteredPhones: IPhonesManufacturedAfterDate[] = phones
+		.filter((phone) => {
+			const time = phone[key];
+			if (time instanceof Date) {
+				return time.getTime() > new Date(initial).getTime();
+			}
+		})
+		.map((phone) => ({ ...phone, initialDate: initial }));
+	return filteredPhones;
+}
+
+// Второй аргумент при вызове функции должен быть связан с первым,
+// а значит мы получим подсказки - свойства этого объекта
+
+console.log(filterPhonesByDate(phones, "manufactured", "2022-01-01"));
