@@ -27,3 +27,6 @@ const google = {
 };
 
 printDebts(google, "name", "open");
+
+type googleKeys = keyof typeof google;
+const keyys: googleKeys = "name";
