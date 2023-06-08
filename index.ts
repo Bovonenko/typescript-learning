@@ -1,57 +1,33 @@
-// Condition ? true : false
-// SomeType extends OtherType ? TrueType : FalseType
-type Example = "string" extends "Hello" ? string : number;
-
-type FromUserOrFromBase<T extends string | number> = T extends string
-	? IDataFromUser
-	: IDataFromBase;
-
-// const test: FromUserOrFromBase<number> = { calories: 45 };
-
-interface User<T extends "created" | Date> {
-	created: T extends "created" ? "created" : Date;
-}
-
-const user: User<"created"> = {
-	created: "created",
+type Currencies = {
+	usa: "usd";
+	china?: "cny";
+	ukraine: "uah";
+	readonly kz: "tenge";
 };
 
-interface IDataFromUser {
-	weight: string;
-}
+type CreateCustomCurr<T> = {
+	-readonly [P in keyof T]-?: string;
+};
 
-interface IDataFromBase {
-	calories: number;
-}
+type CustomCurrencies = CreateCustomCurr<Currencies>;
 
-// function calculateDailyCalories(str: string): IDataFromUser;
-// function calculateDailyCalories(num: number): IDataFromBase;
-function calculateDailyCalories<T extends string | number>(
-	numOrStr: T
-): T extends string ? IDataFromUser : IDataFromBase {
-	if (typeof numOrStr === "string") {
-		const obj: IDataFromUser = {
-			weight: numOrStr,
-		};
-		return obj as FromUserOrFromBase<T>;
-	} else {
-		const obj: IDataFromBase = {
-			calories: numOrStr,
-		};
-		return obj as FromUserOrFromBase<T>;
-	}
-}
+type ROnlyCurr = Readonly<Currencies>;
 
-type GetStringType<T extends "hello" | "world" | string> = T extends "hello"
-	? "hello"
-	: T extends "world"
-	? "world"
-	: string;
+// type CustomCurrencies = {
+// 	usa: string;
+// 	china: string;
+// 	ukraine: string;
+// 	kz: string;
+// };
 
-type GetFirstType<T> = T extends Array<infer First> ? First : T;
+type Keys = "name" | "age" | "role";
 
-type Ex = GetFirstType<number>;
+type User = {
+	[K in Keys]: string;
+};
 
-type ToArray<Type> = Type extends any ? Type[] : never;
-
-const stringArr: ToArray<string> = ["sdfrew", "df"];
+const alex: User = {
+	name: "Alex",
+	age: "25",
+	role: "admin",
+};
