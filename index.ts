@@ -1,20 +1,13 @@
-function setName() {
-	return "COD";
-}
-
 class Player {
-	private static game: string;
-
-	#login: string;
+	private login: string;
 	private _password: string;
 	server: string;
-	protected consent: boolean;
 
-	static {
-		Player.game = setName();
+	constructor(login: string) {
+		this.login = login;
+
+		this.logIn = this.logIn.bind(this);
 	}
-
-	// private constructor() {}  makes static class
 
 	get password() {
 		return this._password;
@@ -25,19 +18,38 @@ class Player {
 		this._password = newPass;
 	}
 
-	static getGameName() {
-		return Player.game;
+	logIn = () => {
+		return `Player ${this.login} online!`;
+	};
+
+	connect() {
+		// Do smth
+		return this;
+	}
+
+	isPro(): this is CompetitivePlayer {
+		return this instanceof CompetitivePlayer;
 	}
 }
 
-const player = new Player();
-player.password = "1qaz";
+// const test = player.logIn;
+// test();
 
-// class CompetitivePlayer extends Player {
-// 	rank: number;
+class CompetitivePlayer extends Player {
+	rank: number;
 
-// 	isConsented() {
-// 		this.consent ? "yes" : "no";
-// 	}
-// }
-// console.log(CompetitivePlayer.getGameName());
+	checkLogin() {
+		return this.logIn();
+	}
+}
+const player = new Player("kaban4ik");
+console.log(player.connect().logIn());
+
+const player2 = new CompetitivePlayer("kaban");
+console.log(player2.connect().logIn());
+
+const somePlayer: Player | CompetitivePlayer = new CompetitivePlayer("Test3");
+
+somePlayer.isPro() ? console.log(somePlayer) : console.log(somePlayer);
+
+// console.log(player2.checkLogin());
