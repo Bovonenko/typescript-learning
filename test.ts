@@ -1,23 +1,23 @@
-const serverNewConfig = {
-	protocol: "https",
-	port: 3001,
-	role: "admin",
-};
-
-const backupConfig = {
-	protocol: "http",
-	port: 3000,
-};
-
-interface BasicConfig {
-	protocol: string;
-	port: number;
+interface IUser {
+	login: string;
+	password: string;
+	token?: number;
 }
 
-const startNewServer = (config: BasicConfig): "Server started" => {
-	console.log(`server started on ${config.protocol}://server:${config.port}`);
-	return "Server started";
-};
+interface Ivalidation {
+	valid: boolean;
+	isValid: (data: string) => boolean;
+}
 
-startNewServer(serverNewConfig);
-startNewServer(backupConfig);
+class UserForm implements IUser, Ivalidation {
+	login: string;
+	password: string;
+	valid: boolean = false;
+	token: number;
+
+	isValid(login: string) {
+		return login.length > 3;
+	}
+}
+
+new UserForm();
