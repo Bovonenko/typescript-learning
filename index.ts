@@ -1,5 +1,5 @@
 class Player {
-	private login: string;
+	#login: string;
 	private _password: string;
 	server: string;
 	protected consent: boolean;
@@ -21,6 +21,9 @@ class CompetitivePlayer extends Player {
 		this.consent ? "yes" : "no";
 	}
 }
+
+const test = new Player();
+test.#login;
 
 const player = new CompetitivePlayer();
 player.password = "1qaz";
