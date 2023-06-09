@@ -1,8 +1,20 @@
+function setName() {
+	return "COD";
+}
+
 class Player {
+	private static game: string;
+
 	#login: string;
 	private _password: string;
 	server: string;
 	protected consent: boolean;
+
+	static {
+		Player.game = setName();
+	}
+
+	// private constructor() {}  makes static class
 
 	get password() {
 		return this._password;
@@ -12,33 +24,20 @@ class Player {
 		// validation
 		this._password = newPass;
 	}
-}
 
-class CompetitivePlayer extends Player {
-	rank: number;
-
-	isConsented() {
-		this.consent ? "yes" : "no";
+	static getGameName() {
+		return Player.game;
 	}
 }
 
-const test = new Player();
-test.#login;
-
-const player = new CompetitivePlayer();
+const player = new Player();
 player.password = "1qaz";
-player.consent; // error
 
-// class User {
-// 	public email: string;
-// 	public name: string;
+// class CompetitivePlayer extends Player {
+// 	rank: number;
 
-// 	constructor(email: string, name: string) {
-// 		this.email = email;
-// 		this.name = name;
+// 	isConsented() {
+// 		this.consent ? "yes" : "no";
 // 	}
 // }
-
-// class User1 {
-// 	constructor(public email: string, public name: string) {}
-// }
+// console.log(CompetitivePlayer.getGameName());
