@@ -4,75 +4,87 @@ interface ICar {
 	freeSeats: number;
 }
 
-@changeDoorStatus(false)
-@changeAmountOfFuel(95)
+// @changeDoorStatus(false)
+// @changeAmountOfFuel(95)
 class myCar implements ICar {
 	fuel: string = "50%";
 	open: boolean = true;
 	errors: any;
 
 	@checkNumberOfSeats(4)
-	freeSeats: number;
+	freeSeats: number = 3;
 
-	@checkAmountOfFuel
+	// @checkAmountOfFuel
 	isOpen(value: string) {
 		return this.open ? "open" : "close" + value;
 	}
 }
 
 function checkNumberOfSeats(limit: number) {
-	return function (target: Object, propertyKey: string | symbol) {
-		let symbol = Symbol();
-
-		const getter = function (this: any) {
-			return this[symbol];
-		};
-
-		const setter = function (this: any, newAmount: number) {
+	return function (target: undefined, context: ClassFieldDecoratorContext) {
+		return function (this: any, newAmount: number) {
 			if (newAmount >= 1 && newAmount < limit) {
-				this[symbol] = newAmount + 1;
+				return newAmount;
 			} else {
-				// console.log(`Limit ${limit} `);
-				Object.defineProperty(target, "errors", {
-					value: `Limit ${limit} `,
-				});
+				throw Error(`error: Limit is ${limit}`);
 			}
 		};
-
-		Object.defineProperty(target, propertyKey, {
-			get: getter,
-			set: setter,
-		});
 	};
 }
 
-function checkAmountOfFuel(
-	target: Object,
-	propertyKey: string | symbol,
-	descriptor: PropertyDescriptor
-): PropertyDescriptor | void {
-	const oldValue = descriptor.value;
-	descriptor.value = function (this: any, ...args: any[]) {
-		console.log(this.fuel);
-		return oldValue.apply(this, args);
-	};
-}
+// function checkNumberOfSeats(limit: number) {
+// 	return function (target: Object, propertyKey: string | symbol) {
+// 		let symbol = Symbol();
 
-function changeDoorStatus(status: boolean) {
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-		return class extends constructor {
-			open = status;
-		};
-	};
-}
+// 		const getter = function (this: any) {
+// 			return this[symbol];
+// 		};
 
-function changeAmountOfFuel(amount: number) {
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-		return class extends constructor {
-			fuel = `${amount}%`;
-		};
-	};
-}
+// 		const setter = function (this: any, newAmount: number) {
+// 			if (newAmount >= 1 && newAmount < limit) {
+// 				this[symbol] = newAmount + 1;
+// 			} else {
+// 				// console.log(`Limit ${limit} `);
+// 				Object.defineProperty(target, "errors", {
+// 					value: `Limit ${limit} `,
+// 				});
+// 			}
+// 		};
+
+// 		Object.defineProperty(target, propertyKey, {
+// 			get: getter,
+// 			set: setter,
+// 		});
+// 	};
+// }
+
+// function checkAmountOfFuel(
+// 	target: Object,
+// 	propertyKey: string | symbol,
+// 	descriptor: PropertyDescriptor
+// ): PropertyDescriptor | void {
+// 	const oldValue = descriptor.value;
+// 	descriptor.value = function (this: any, ...args: any[]) {
+// 		console.log(this.fuel);
+// 		return oldValue.apply(this, args);
+// 	};
+// }
+
+// function changeDoorStatus(status: boolean) {
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		return class extends constructor {
+// 			open = status;
+// 		};
+// 	};
+// }
+
+// function changeAmountOfFuel(amount: number) {
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		return class extends constructor {
+// 			fuel = `${amount}%`;
+// 		};
+// 	};
+// }
 
 // function checkAmountOfFuel(target: any, context: ClassMethodDecoratorContext) {
 // 	return function (this: any, ...args: any[]) {
@@ -119,6 +131,6 @@ function changeAmountOfFuel(amount: number) {
 // }
 
 const car = new myCar();
-car.freeSeats = 3;
+car.freeSeats = -3;
 console.log(car);
 console.log(car.errors);
