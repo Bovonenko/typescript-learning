@@ -10,8 +10,18 @@ class myCar implements ICar {
 	fuel: string = "50%";
 	open: boolean = true;
 	errors: any;
+	_weight: number = 1000;
 
-	@checkNumberOfSeats(4)
+	@log
+	set weight(num: number) {
+		this._weight = this._weight + num;
+	}
+
+	get weight() {
+		return this._weight;
+	}
+
+	// @checkNumberOfSeats(4)
 	freeSeats: number = 3;
 
 	// @checkAmountOfFuel
@@ -20,17 +30,34 @@ class myCar implements ICar {
 	}
 }
 
-function checkNumberOfSeats(limit: number) {
-	return function (target: undefined, context: ClassFieldDecoratorContext) {
-		return function (this: any, newAmount: number) {
-			if (newAmount >= 1 && newAmount < limit) {
-				return newAmount;
-			} else {
-				throw Error(`error: Limit is ${limit}`);
-			}
-		};
+function log(
+	target: Object,
+	propertyKey: string | symbol,
+	descriptor: PropertyDescriptor
+): PropertyDescriptor | void {
+	const oldValue = descriptor.set;
+	const oldGet = descriptor.get;
+	descriptor.set = function (this: any, ...args: any) {
+		console.log(`Changing num ${[...args]}`);
+		return oldValue?.apply(this, args);
+	};
+	descriptor.get = function () {
+		console.log(`test`);
+		return oldGet?.apply(this);
 	};
 }
+
+// function checkNumberOfSeats(limit: number) {
+// 	return function (target: undefined, context: ClassFieldDecoratorContext) {
+// 		return function (this: any, newAmount: number) {
+// 			if (newAmount >= 1 && newAmount < limit) {
+// 				return newAmount;
+// 			} else {
+// 				throw Error(`error: Limit is ${limit}`);
+// 			}
+// 		};
+// 	};
+// }
 
 // function checkNumberOfSeats(limit: number) {
 // 	return function (target: Object, propertyKey: string | symbol) {
@@ -131,6 +158,7 @@ function checkNumberOfSeats(limit: number) {
 // }
 
 const car = new myCar();
-car.freeSeats = -3;
-console.log(car);
-console.log(car.errors);
+car.weight = -3;
+
+console.log(car.weight);
+// console.log(car.errors);
