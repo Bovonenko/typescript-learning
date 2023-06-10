@@ -1,4 +1,11 @@
 "use strict";
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -26,58 +33,74 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
 };
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
-};
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 let myCar = (() => {
-    let _classDecorators = [changeDoorStatus(true), changeAmountOfFuel(95)];
+    let _classDecorators = [changeDoorStatus(false), changeAmountOfFuel(95)];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
+    let _instanceExtraInitializers = [];
+    let _isOpen_decorators;
     var myCar = _classThis = class {
         constructor() {
-            this.fuel = "50%";
+            this.fuel = (__runInitializers(this, _instanceExtraInitializers), "50%");
             this.open = true;
         }
-        isOpen() {
-            console.log(this.fuel);
-            return this.open ? "open" : "close";
+        isOpen(value) {
+            return this.open ? "open" : "close" + value;
         }
     };
     __setFunctionName(_classThis, "myCar");
     (() => {
+        _isOpen_decorators = [checkAmountOfFuel];
+        __esDecorate(_classThis, null, _isOpen_decorators, { kind: "method", name: "isOpen", static: false, private: false, access: { has: obj => "isOpen" in obj, get: obj => obj.isOpen } }, null, _instanceExtraInitializers);
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         myCar = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return myCar = _classThis;
 })();
+// function checkAmountOfFuel(
+// 	target: Object,
+// 	propertyKey: string | symbol,
+// 	descriptor: PropertyDescriptor
+// ): PropertyDescriptor | void {
+// 	const oldValue = descriptor.value;
+// 	descriptor.value = function (this: any, ...args: any[]) {
+// 		console.log(this.fuel);
+// 		return oldValue.apply(this, args);
+// 	};
+// }
 // function changeDoorStatus(status: boolean) {
-// 	console.log("door init");
 // 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-// 		console.log("door changed");
 // 		return class extends constructor {
 // 			open = status;
 // 		};
 // 	};
 // }
 // function changeAmountOfFuel(amount: number) {
-// 	console.log("fuel init");
 // 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-// 		console.log("fuel changed");
 // 		return class extends constructor {
 // 			fuel = `${amount}%`;
 // 		};
 // 	};
 // }
+// function checkAmountOfFuel(target: any, context: ClassMethodDecoratorContext) {
+// 	return function (this: any, ...args: any[]) {
+// 		console.log(this.fuel);
+// 		return target.apply(this, args);
+// 	};
+// }
+function checkAmountOfFuel(target, context) {
+    return function (...args) {
+        // console.log(this.fuel);
+        console.log(`${String(context.name)} started `);
+        return target.apply(this, args);
+    };
+}
 function changeDoorStatus(status) {
     console.log("door init");
     return (target, context) => {
@@ -113,4 +136,4 @@ function changeAmountOfFuel(amount) {
 // 	return car;
 // }
 const car = new myCar();
-console.log(car.isOpen());
+console.log(car.isOpen("checked"));

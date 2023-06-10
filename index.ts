@@ -17,61 +17,77 @@ class myCar implements ICar {
 	}
 }
 
-function checkAmountOfFuel(
-	target: Object,
-	propertyKey: string | symbol,
-	descriptor: PropertyDescriptor
-): PropertyDescriptor | void {
-	const oldValue = descriptor.value;
-	descriptor.value = function (this: any, ...args: any[]) {
-		console.log(this.fuel);
-		return oldValue.apply(this, args);
-		// console.log(this.fuel);
-		// return this.open ? "open" : "close";
-	};
-}
-
-function changeDoorStatus(status: boolean) {
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-		return class extends constructor {
-			open = status;
-		};
-	};
-}
-
-function changeAmountOfFuel(amount: number) {
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
-		return class extends constructor {
-			fuel = `${amount}%`;
-		};
-	};
-}
+// function checkAmountOfFuel(
+// 	target: Object,
+// 	propertyKey: string | symbol,
+// 	descriptor: PropertyDescriptor
+// ): PropertyDescriptor | void {
+// 	const oldValue = descriptor.value;
+// 	descriptor.value = function (this: any, ...args: any[]) {
+// 		console.log(this.fuel);
+// 		return oldValue.apply(this, args);
+// 	};
+// }
 
 // function changeDoorStatus(status: boolean) {
-// 	console.log("door init");
-// 	return <T extends { new (...arg: any[]): {} }>(
-// 		target: T,
-// 		context: ClassDecoratorContext<T>
-// 	) => {
-// 		console.log("door changed");
-// 		return class extends target {
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		return class extends constructor {
 // 			open = status;
 // 		};
 // 	};
 // }
 
 // function changeAmountOfFuel(amount: number) {
-// 	console.log("fuel init");
-// 	return <T extends { new (...arg: any[]): {} }>(
-// 		target: T,
-// 		context: ClassDecoratorContext<T>
-// 	) => {
-// 		console.log("fuel changed");
-// 		return class extends target {
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		return class extends constructor {
 // 			fuel = `${amount}%`;
 // 		};
 // 	};
 // }
+
+// function checkAmountOfFuel(target: any, context: ClassMethodDecoratorContext) {
+// 	return function (this: any, ...args: any[]) {
+// 		console.log(this.fuel);
+// 		return target.apply(this, args);
+// 	};
+// }
+
+function checkAmountOfFuel<T, A extends any[], R>(
+	target: (this: T, ...args: A) => R,
+	context: ClassMethodDecoratorContext<T, (this: T, ...args: A) => R>
+) {
+	return function (this: T, ...args: A): R {
+		// console.log(this.fuel);
+		console.log(`${String(context.name)} started `);
+		return target.apply(this, args);
+	};
+}
+
+function changeDoorStatus(status: boolean) {
+	console.log("door init");
+	return <T extends { new (...arg: any[]): {} }>(
+		target: T,
+		context: ClassDecoratorContext<T>
+	) => {
+		console.log("door changed");
+		return class extends target {
+			open = status;
+		};
+	};
+}
+
+function changeAmountOfFuel(amount: number) {
+	console.log("fuel init");
+	return <T extends { new (...arg: any[]): {} }>(
+		target: T,
+		context: ClassDecoratorContext<T>
+	) => {
+		console.log("fuel changed");
+		return class extends target {
+			fuel = `${amount}%`;
+		};
+	};
+}
 
 // function closeCar<T extends { new (...arg: any[]): {} }>(constructor: T) {
 // 	return class extends constructor {
