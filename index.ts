@@ -16,11 +16,34 @@ class myCar implements ICar {
 	}
 }
 
+// function changeDoorStatus(status: boolean) {
+// 	console.log("door init");
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		console.log("door changed");
+// 		return class extends constructor {
+// 			open = status;
+// 		};
+// 	};
+// }
+
+// function changeAmountOfFuel(amount: number) {
+// 	console.log("fuel init");
+// 	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+// 		console.log("fuel changed");
+// 		return class extends constructor {
+// 			fuel = `${amount}%`;
+// 		};
+// 	};
+// }
+
 function changeDoorStatus(status: boolean) {
 	console.log("door init");
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+	return <T extends { new (...arg: any[]): {} }>(
+		target: T,
+		context: ClassDecoratorContext<T>
+	) => {
 		console.log("door changed");
-		return class extends constructor {
+		return class extends target {
 			open = status;
 		};
 	};
@@ -28,9 +51,12 @@ function changeDoorStatus(status: boolean) {
 
 function changeAmountOfFuel(amount: number) {
 	console.log("fuel init");
-	return <T extends { new (...arg: any[]): {} }>(constructor: T) => {
+	return <T extends { new (...arg: any[]): {} }>(
+		target: T,
+		context: ClassDecoratorContext<T>
+	) => {
 		console.log("fuel changed");
-		return class extends constructor {
+		return class extends target {
 			fuel = `${amount}%`;
 		};
 	};
