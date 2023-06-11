@@ -12,11 +12,12 @@ class myCar implements ICar {
 	errors: any;
 	_weight: number = 1000;
 
-	@log
+	@logOnSet
 	set weight(num: number) {
 		this._weight = this._weight + num;
 	}
 
+	@logOnGet
 	get weight() {
 		return this._weight;
 	}
@@ -30,22 +31,41 @@ class myCar implements ICar {
 	}
 }
 
-function log(
-	target: Object,
-	propertyKey: string | symbol,
-	descriptor: PropertyDescriptor
-): PropertyDescriptor | void {
-	const oldValue = descriptor.set;
-	const oldGet = descriptor.get;
-	descriptor.set = function (this: any, ...args: any) {
+function logOnSet<T, R>(
+	target: (this: T, value: number) => R,
+	context: ClassSetterDecoratorContext<T, number>
+) {
+	return function (this: T, ...args: any): R {
 		console.log(`Changing num ${[...args]}`);
-		return oldValue?.apply(this, args);
-	};
-	descriptor.get = function () {
-		console.log(`test`);
-		return oldGet?.apply(this);
+		return target.apply(this, args);
 	};
 }
+
+function logOnGet<T, R>(
+	target: (this: T) => R,
+	context: ClassGetterDecoratorContext<T, number>
+) {
+	return function (this: T): R {
+		console.log(`test`);
+		return target.apply(this);
+	};
+}
+// function log(
+// 	target: Object,
+// 	propertyKey: string | symbol,
+// 	descriptor: PropertyDescriptor
+// ): PropertyDescriptor | void {
+// 	const oldValue = descriptor.set;
+// 	const oldGet = descriptor.get;
+// 	descriptor.set = function (this: any, ...args: any) {
+// 		console.log(`Changing num ${[...args]}`);
+// 		return oldValue?.apply(this, args);
+// 	};
+// 	descriptor.get = function () {
+// 		console.log(`test`);
+// 		return oldGet?.apply(this);
+// 	};
+// }
 
 // function checkNumberOfSeats(limit: number) {
 // 	return function (target: undefined, context: ClassFieldDecoratorContext) {

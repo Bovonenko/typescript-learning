@@ -38,13 +38,21 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
 let myCar = (() => {
     var _a;
     let _instanceExtraInitializers = [];
-    let _freeSeats_decorators;
-    let _freeSeats_initializers = [];
+    let _set_weight_decorators;
+    let _get_weight_decorators;
     return _a = class myCar {
             constructor() {
                 this.fuel = (__runInitializers(this, _instanceExtraInitializers), "50%");
                 this.open = true;
-                this.freeSeats = __runInitializers(this, _freeSeats_initializers, 3);
+                this._weight = 1000;
+                // @checkNumberOfSeats(4)
+                this.freeSeats = 3;
+            }
+            set weight(num) {
+                this._weight = this._weight + num;
+            }
+            get weight() {
+                return this._weight;
             }
             // @checkAmountOfFuel
             isOpen(value) {
@@ -52,23 +60,52 @@ let myCar = (() => {
             }
         },
         (() => {
-            _freeSeats_decorators = [checkNumberOfSeats(4)];
-            __esDecorate(null, null, _freeSeats_decorators, { kind: "field", name: "freeSeats", static: false, private: false, access: { has: obj => "freeSeats" in obj, get: obj => obj.freeSeats, set: (obj, value) => { obj.freeSeats = value; } } }, _freeSeats_initializers, _instanceExtraInitializers);
+            _set_weight_decorators = [logOnSet];
+            _get_weight_decorators = [logOnGet];
+            __esDecorate(_a, null, _set_weight_decorators, { kind: "setter", name: "weight", static: false, private: false, access: { has: obj => "weight" in obj, set: (obj, value) => { obj.weight = value; } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _get_weight_decorators, { kind: "getter", name: "weight", static: false, private: false, access: { has: obj => "weight" in obj, get: obj => obj.weight } }, null, _instanceExtraInitializers);
         })(),
         _a;
 })();
-function checkNumberOfSeats(limit) {
-    return function (target, context) {
-        return function (newAmount) {
-            if (newAmount >= 1 && newAmount < limit) {
-                return newAmount;
-            }
-            else {
-                throw Error(`error: Limit is ${limit}`);
-            }
-        };
+function logOnSet(target, context) {
+    return function (...args) {
+        console.log(`Changing num ${[...args]}`);
+        return target.apply(this, args);
     };
 }
+function logOnGet(target, context) {
+    return function () {
+        console.log(`test`);
+        return target.apply(this);
+    };
+}
+// function log(
+// 	target: Object,
+// 	propertyKey: string | symbol,
+// 	descriptor: PropertyDescriptor
+// ): PropertyDescriptor | void {
+// 	const oldValue = descriptor.set;
+// 	const oldGet = descriptor.get;
+// 	descriptor.set = function (this: any, ...args: any) {
+// 		console.log(`Changing num ${[...args]}`);
+// 		return oldValue?.apply(this, args);
+// 	};
+// 	descriptor.get = function () {
+// 		console.log(`test`);
+// 		return oldGet?.apply(this);
+// 	};
+// }
+// function checkNumberOfSeats(limit: number) {
+// 	return function (target: undefined, context: ClassFieldDecoratorContext) {
+// 		return function (this: any, newAmount: number) {
+// 			if (newAmount >= 1 && newAmount < limit) {
+// 				return newAmount;
+// 			} else {
+// 				throw Error(`error: Limit is ${limit}`);
+// 			}
+// 		};
+// 	};
+// }
 // function checkNumberOfSeats(limit: number) {
 // 	return function (target: Object, propertyKey: string | symbol) {
 // 		let symbol = Symbol();
@@ -157,6 +194,6 @@ function checkNumberOfSeats(limit) {
 // 	};
 // }
 const car = new myCar();
-car.freeSeats = -3;
-console.log(car);
-console.log(car.errors);
+car.weight = -3;
+console.log(car.weight);
+// console.log(car.errors);
